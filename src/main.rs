@@ -116,9 +116,15 @@ fn p3() -> u64 {
 // {{{ main
 
 fn main() {
-    println!("Problem 1: {}", p1());
-    println!("Problem 2: {}", p2());
-    println!("Problem 3: {}", p3());
+    let solutions = [
+        p1,
+        p2,
+        p3,
+    ];
+
+    for (i, soln) in solutions.iter().enumerate() {
+        println!("Problem {}: {}", i+1, soln());
+    }
 }
 
 // }}}
