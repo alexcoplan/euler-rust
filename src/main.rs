@@ -232,6 +232,28 @@ fn p5() -> u64 {
 }
 
 // }}}
+// {{{ problem 6
+
+fn abs_diff(a : u64, b : u64) -> u64 {
+    if a > b {
+        return a - b;
+    }
+    return b - a;
+}
+
+fn p6_internal(n : u64) -> u64 {
+    let sum : u64 = (1..n+1).sum();
+    let sum_of_squares : u64 = (1..n+1).map(|x| x*x).sum();
+    let square_of_sum = sum * sum;
+
+    return abs_diff(square_of_sum, sum_of_squares);
+}
+
+fn p6() -> u64 {
+    return p6_internal(100);
+}
+
+// }}}
 // {{{ main
 
 fn run_all() {
@@ -241,6 +263,7 @@ fn run_all() {
         p3,
         p4,
         p5,
+        p6,
     ];
 
     for (i, soln) in solutions.iter().enumerate() {
@@ -306,6 +329,12 @@ mod tests {
     fn test_p5() {
         assert_eq!(p5_internal(10), 2520);
         assert_eq!(p5(), 232792560);
+    }
+
+    #[test]
+    fn test_p6() {
+        assert_eq!(p6_internal(10), 2640);
+        assert_eq!(p6(), 25164150);
     }
 }
 
