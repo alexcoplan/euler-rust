@@ -113,18 +113,106 @@ fn p3() -> u64 {
 }
 
 // }}}
+// {{{ problem 4
+
+struct DigIter {
+    x: u64,
+}
+
+impl DigIter {
+    fn new(n: u64) -> DigIter {
+        DigIter { x: n }
+    }
+}
+
+impl Iterator for DigIter {
+    type Item = u8;
+
+    fn next(&mut self) -> Option <Self::Item> {
+        if self.x == 0 {
+            return None
+        }
+
+        let dig = (self.x % 10) as u8;
+        self.x /= 10;
+        return Some(dig);
+    }
+}
+
+fn collect_u8<I>(arr : &mut[u8], iter: I) -> usize
+    where I: Iterator<Item = u8> {
+    let mut i = 0;
+    for x in iter {
+        assert!(i < arr.len());
+        arr[i] = x;
+        i += 1;
+    }
+
+    return i;
+}
+
+fn is_palindrome(x : u64) -> bool {
+    let mut digits = [0; 32];
+    let n = collect_u8(&mut digits, DigIter::new(x));
+
+    if n < 2 {
+        return true;
+    }
+
+    let max = n/2 + 1;
+    for i in 0..max {
+        if digits[i] != digits[n-1-i] {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Finds the largest palindrome made from the product of two
+// n-digit numbers.
+fn p4_internal(digits : u32) -> u64 {
+    assert!(digits > 0);
+    let base = 10_u64;
+    let start = base.pow(digits - 1);
+    let end = base.pow(digits);
+
+    let mut ans = 0;
+
+    for i in start..end {
+        for j in i..end {
+            let cand = i * j;
+            if cand > ans && is_palindrome(cand) {
+                ans = cand;
+            }
+        }
+    }
+
+    return ans;
+}
+
+fn p4() -> u64 {
+    return p4_internal(3);
+}
+
+// }}}
 // {{{ main
 
-fn main() {
+fn run_all() {
     let solutions = [
         p1,
         p2,
         p3,
+        p4,
     ];
 
     for (i, soln) in solutions.iter().enumerate() {
         println!("Problem {}: {}", i+1, soln());
     }
+}
+
+fn main() {
+    run_all();
 }
 
 // }}}
@@ -157,6 +245,24 @@ mod tests {
     fn test_p3() {
         assert_eq!(largest_prime_factor(13195), 29);
         assert_eq!(p3(), 6857);
+    }
+
+    #[test]
+    fn test_p4() {
+        let mut digits = [0; 3];
+        let iter = DigIter::new(123);
+        assert_eq!(collect_u8(&mut digits, iter), 3);
+        assert_eq!(digits, [3,2,1]);
+
+        assert_eq!(is_palindrome(0), true);
+        assert_eq!(is_palindrome(11), true);
+        assert_eq!(is_palindrome(12), false);
+        assert_eq!(is_palindrome(909), true);
+        assert_eq!(is_palindrome(908), false);
+        assert_eq!(is_palindrome(9009), true);
+        assert_eq!(is_palindrome(9129), false);
+        assert_eq!(p4_internal(2), 9009);
+        assert_eq!(p4(), 906609);
     }
 }
 
