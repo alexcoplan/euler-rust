@@ -196,6 +196,42 @@ fn p4() -> u64 {
 }
 
 // }}}
+// {{{ problem 5
+
+fn gcd(a : u64, b: u64) -> u64 {
+    if b == 0 {
+        return a;
+    }
+
+    return gcd(b, a % b);
+}
+
+fn lcm(a : u64, b: u64) -> u64 {
+    return (a / gcd(a,b)) * b;
+}
+
+fn lcm_iter<I>(mut iter: I) -> u64
+    where I: Iterator<Item = u64> {
+    let mut ans = iter.next().unwrap();
+
+    for x in iter {
+        ans = lcm(ans, x);
+    }
+
+    return ans;
+}
+
+// Computes the smallest positive number that is divisible
+// by all of the numbers from 1 to n inclusive.
+fn p5_internal(n : u64) -> u64 {
+    return lcm_iter(1..n+1);
+}
+
+fn p5() -> u64 {
+    return p5_internal(20);
+}
+
+// }}}
 // {{{ main
 
 fn run_all() {
@@ -204,6 +240,7 @@ fn run_all() {
         p2,
         p3,
         p4,
+        p5,
     ];
 
     for (i, soln) in solutions.iter().enumerate() {
@@ -263,6 +300,12 @@ mod tests {
         assert_eq!(is_palindrome(9129), false);
         assert_eq!(p4_internal(2), 9009);
         assert_eq!(p4(), 906609);
+    }
+
+    #[test]
+    fn test_p5() {
+        assert_eq!(p5_internal(10), 2520);
+        assert_eq!(p5(), 232792560);
     }
 }
 
