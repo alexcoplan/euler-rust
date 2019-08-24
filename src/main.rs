@@ -71,11 +71,54 @@ fn p2() -> u64 {
 
 
 // }}}
+// {{{ problem 3
+
+fn isqrt_ceil(n : u64) -> u64 {
+    return (n as f64).sqrt().ceil() as u64;
+}
+
+fn is_prime(n : u64) -> bool {
+    let max = isqrt_ceil(n);
+    for i in 2..max {
+        if n % i == 0 {
+            return false
+        }
+    }
+
+    return true
+}
+
+fn largest_prime_factor(n : u64) -> u64 {
+    // Start with ceil(sqrt(n)) and work downwards as this is the largest
+    // possible non-trivial prime factor.
+    let start = isqrt_ceil(n);
+    for i in (2..start).rev() {
+        if n % i != 0 {
+            continue; // not a factor
+        }
+
+        if is_prime(i) {
+            return i;
+        }
+
+        // XXX: could maybe optimise here by dividing through by i and keeping track of i's
+        // factorisation.
+    }
+
+    panic!();
+}
+
+fn p3() -> u64 {
+    return largest_prime_factor(600851475143)
+}
+
+// }}}
 // {{{ main
 
 fn main() {
     println!("Problem 1: {}", p1());
     println!("Problem 2: {}", p2());
+    println!("Problem 3: {}", p3());
 }
 
 // }}}
@@ -102,6 +145,12 @@ mod tests {
 
         assert_eq!(p2_internal(89), 44);
         assert_eq!(p2(), 4613732);
+    }
+
+    #[test]
+    fn test_p3() {
+        assert_eq!(largest_prime_factor(13195), 29);
+        assert_eq!(p3(), 6857);
     }
 }
 
