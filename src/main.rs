@@ -11,11 +11,11 @@ fn fizzbuzz_sum(n : u64) -> u64 {
         }
     }
 
-    return sum;
+    sum
 }
 
 fn p1() -> u64 {
-    return fizzbuzz_sum(1000);
+    fizzbuzz_sum(1000)
 }
 
 // }}}
@@ -42,7 +42,7 @@ impl Iterator for FibIter {
 
         self.x = self.y;
         self.y = nxt;
-        return Some(self.x);
+        Some(self.x)
     }
 }
 
@@ -66,7 +66,7 @@ fn p2_internal(max_term : u64) -> u64 {
 }
 
 fn p2() -> u64 {
-    return p2_internal(4 * 1000 * 1000);
+    p2_internal(4 * 1000 * 1000)
 }
 
 
@@ -74,7 +74,7 @@ fn p2() -> u64 {
 // {{{ problem 3
 
 fn isqrt_ceil(n : u64) -> u64 {
-    return (n as f64).sqrt().ceil() as u64;
+    (n as f64).sqrt().ceil() as u64
 }
 
 fn is_prime(n : u64) -> bool {
@@ -84,8 +84,7 @@ fn is_prime(n : u64) -> bool {
             return false
         }
     }
-
-    return true
+    true
 }
 
 fn largest_prime_factor(n : u64) -> u64 {
@@ -109,7 +108,7 @@ fn largest_prime_factor(n : u64) -> u64 {
 }
 
 fn p3() -> u64 {
-    return largest_prime_factor(600851475143)
+    largest_prime_factor(600_851_475_143)
 }
 
 // }}}
@@ -135,7 +134,7 @@ impl Iterator for DigIter {
 
         let dig = (self.x % 10) as u8;
         self.x /= 10;
-        return Some(dig);
+        Some(dig)
     }
 }
 
@@ -147,8 +146,7 @@ fn collect_u8<I>(arr : &mut[u8], iter: I) -> usize
         arr[i] = x;
         i += 1;
     }
-
-    return i;
+    i
 }
 
 fn is_palindrome(x : u64) -> bool {
@@ -165,8 +163,7 @@ fn is_palindrome(x : u64) -> bool {
             return false;
         }
     }
-
-    return true;
+    true
 }
 
 // Finds the largest palindrome made from the product of two
@@ -188,11 +185,11 @@ fn p4_internal(digits : u32) -> u64 {
         }
     }
 
-    return ans;
+    ans
 }
 
 fn p4() -> u64 {
-    return p4_internal(3);
+    p4_internal(3)
 }
 
 // }}}
@@ -203,11 +200,11 @@ fn gcd(a : u64, b: u64) -> u64 {
         return a;
     }
 
-    return gcd(b, a % b);
+    gcd(b, a % b)
 }
 
 fn lcm(a : u64, b: u64) -> u64 {
-    return (a / gcd(a,b)) * b;
+    (a / gcd(a,b)) * b
 }
 
 fn lcm_iter<I>(mut iter: I) -> u64
@@ -217,18 +214,17 @@ fn lcm_iter<I>(mut iter: I) -> u64
     for x in iter {
         ans = lcm(ans, x);
     }
-
-    return ans;
+    ans
 }
 
 // Computes the smallest positive number that is divisible
 // by all of the numbers from 1 to n inclusive.
 fn p5_internal(n : u64) -> u64 {
-    return lcm_iter(1..n+1);
+    lcm_iter(1..=n)
 }
 
 fn p5() -> u64 {
-    return p5_internal(20);
+    p5_internal(20)
 }
 
 // }}}
@@ -236,21 +232,22 @@ fn p5() -> u64 {
 
 fn abs_diff(a : u64, b : u64) -> u64 {
     if a > b {
-        return a - b;
+        a - b
+    } else {
+        b - a
     }
-    return b - a;
 }
 
 fn p6_internal(n : u64) -> u64 {
-    let sum : u64 = (1..n+1).sum();
-    let sum_of_squares : u64 = (1..n+1).map(|x| x*x).sum();
+    let sum : u64 = (1..=n).sum();
+    let sum_of_squares : u64 = (1..=n).map(|x| x*x).sum();
     let square_of_sum = sum * sum;
 
-    return abs_diff(square_of_sum, sum_of_squares);
+    abs_diff(square_of_sum, sum_of_squares)
 }
 
 fn p6() -> u64 {
-    return p6_internal(100);
+    p6_internal(100)
 }
 
 // }}}
